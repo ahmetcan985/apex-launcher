@@ -35,30 +35,24 @@ jobs:
         run: |
           gradle wrapper --gradle-version 8.6
           chmod +x gradlew
-          ./gradlew :app:assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle-build.log
-          echo "=== SEARCHING FOR COMPILED APKS ==="
-          find . -name "*.apk" -ls
-
-      - name: Upload Build Log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradle-build-log
-          path: gradle-build.log
+          ./gradlew :app:assembleDebug --stacktrace
+          echo "=== COMPILED APK FILES ==="
+          ls -la app/build/outputs/apk/debug/
+          cp app/build/outputs/apk/debug/app-debug.apk ./ApexLauncher-Xiaomi17TPro.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ApexLauncher-APK
-          path: "**/*.apk"
-          if-no-files-found: warn
+          name: ApexLauncher-Xiaomi17TPro
+          path: ./ApexLauncher-Xiaomi17TPro.apk
 
       - name: Create GitHub Release with APK
         uses: softprops/action-gh-release@v2
+        if: success()
         with:
-          tag_name: v1.0.1
-          name: "Apex Telemetry Launcher v1.0.1"
+          tag_name: v1.0.2
+          name: "Apex Telemetry Launcher v1.0.2"
           body: "Xiaomi 17T Pro için Tesla telemetrili ve donanımsal kamera optimizasyonlu orijinal Android Launcher APK."
-          files: "**/*.apk"
+          files: ./ApexLauncher-Xiaomi17TPro.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
