@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tesla Industrial Telemetry Colors -->
+    <color name="bg_matte_dark">#0A0C10</color>
+    <color name="bg_card_titanium">#131720</color>
+    <color name="border_card">#202636</color>
+    <color name="accent_amber">#FFB800</color>
+    <color name="accent_cyan">#00E5FF</color>
+    <color name="accent_red">#FF3B30</color>
+    <color name="accent_green">#00E676</color>
+    <color name="text_primary">#F4F6FB</color>
+    <color name="text_secondary">#8E9BAE</color>
+    <color name="text_mono">#64748B</color>
+</resources>
