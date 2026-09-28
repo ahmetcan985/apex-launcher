@@ -75,17 +75,18 @@ class HardwareCameraManager(private val context: Context) : SensorEventListener 
      * Launches the native camera application
      */
     fun launchHardwareCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+        val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
-        if (intent.resolveActivity(context.packageManager) != null) {
+        try {
             context.startActivity(intent)
-        } else {
-            val fallback = Intent(Intent.ACTION_MAIN).apply {
-                addCategory(Intent.CATEGORY_APP_CAMERA)
+        } catch (_: Exception) {
+            val fallback = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-            context.startActivity(fallback)
+            try {
+                context.startActivity(fallback)
+            } catch (_: Exception) {}
         }
     }
 }
