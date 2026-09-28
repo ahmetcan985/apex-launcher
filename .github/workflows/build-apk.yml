@@ -21,8 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Accept Android SDK Licenses
+      - name: Configure Android SDK Location and Licenses
         run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Setup Gradle 8.6
@@ -30,9 +31,18 @@ jobs:
         with:
           gradle-version: '8.6'
 
-      - name: Build Debug APK
+      - name: Generate Wrapper and Build Debug APK
         run: |
-          gradle assembleDebug --stacktrace
+          gradle wrapper --gradle-version 8.6
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle-build.log
+
+      - name: Upload Build Log if Failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: gradle-build.log
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
